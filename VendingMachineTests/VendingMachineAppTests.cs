@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VendingMachine;
@@ -43,6 +44,19 @@ namespace VendingMachineTests
             Assert.IsTrue(products.Any(i => i.Name.Equals("candy")));
             Assert.IsTrue(products.Where(i => i.Name.Equals("candy")).Single().Price.Equals(0.50));
             Assert.IsTrue(products.Where(i => i.Name.Equals("candy")).Single().AmountInStock.Equals(2));
+        }
+
+        [TestMethod]
+        public void VerifyConsoleOuputTest()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                vendingMachine.DisplayProducts();
+                
+                Assert.IsTrue(sw.ToString().Count() > 0);
+            }
         }
     }
 }
