@@ -8,8 +8,14 @@ namespace VendingMachine
         static void Main()
         {            
             VendingMachineApp app = new VendingMachineApp();
+            app.DisplayCurrentChange();
             app.DisplayCoins();
             Console.ReadLine();
+        }
+
+        public void DisplayCurrentChange()
+        {
+            Console.WriteLine("Current Change: " + changeInserted);
         }
 
         public void DisplayCoins()
@@ -22,6 +28,7 @@ namespace VendingMachine
             Console.WriteLine("4:" + "\t" + "Penny");
             Console.Write("\n" + "Please select a coin Id:");
         }
+
 
         public double DetermineTypeOfCoin(string coin)
         {
@@ -60,8 +67,8 @@ namespace VendingMachine
             products.Add(candy);
             return products;
         }
-        
-        public double changeInserted { get => changeInserted; set => changeInserted = value; }
+
+        private double changeInserted = 0;
     }
 
     public struct Item

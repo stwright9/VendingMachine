@@ -71,5 +71,18 @@ namespace VendingMachineTests
                 Assert.IsTrue(sw.ToString().Count() > 0);
             }
         }
+
+        [TestMethod]
+        public void VerifyConsoleOuputDisplayCurrentChangeTest()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                vendingMachine.DisplayCurrentChange();
+
+                Assert.IsTrue(sw.ToString().Count() > 0);
+            }
+        }
     }
 }
