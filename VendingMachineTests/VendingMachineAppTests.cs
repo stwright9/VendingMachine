@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VendingMachine;
 
 namespace VendingMachineTests
@@ -47,7 +47,7 @@ namespace VendingMachineTests
         }
 
         [TestMethod]
-        public void VerifyConsoleOuputTest()
+        public void VerifyConsoleOuputDisplayProductsTest()
         {
             using (StringWriter sw = new StringWriter())
             {
@@ -55,6 +55,19 @@ namespace VendingMachineTests
 
                 vendingMachine.DisplayProducts();
                 
+                Assert.IsTrue(sw.ToString().Count() > 0);
+            }
+        }
+
+        [TestMethod]
+        public void VerifyConsoleOuputDisplayCoinsTest()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                vendingMachine.DisplayCoins();
+
                 Assert.IsTrue(sw.ToString().Count() > 0);
             }
         }

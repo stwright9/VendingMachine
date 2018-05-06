@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VendingMachine
 {
     public class VendingMachineApp
     {        
         static void Main()
-        {
+        {            
             VendingMachineApp app = new VendingMachineApp();
-            using (StringWriter sw = new StringWriter())
-            {
-                Console.SetOut(sw);
+            app.DisplayCoins();
+            Console.ReadLine();
+        }
 
-                app.DisplayProducts();
-
-                if(sw.ToString().Count() > 0);
-            }
-
-            ////VendingMachineApp app = new VendingMachineApp();
-            //app.DisplayProducts();
-            //Console.ReadLine();
-
-
+        public void DisplayCoins()
+        {
+            Console.WriteLine("INSERT COIN" + "\n");
+            Console.WriteLine("Id" + "\t" + "Coin");
+            Console.WriteLine("1:" + "\t" + "Quarter");
+            Console.WriteLine("2:" + "\t" + "Dime");
+            Console.WriteLine("3:" + "\t" + "Nickel");
+            Console.WriteLine("4:" + "\t" + "Penny");
+            Console.Write("\n" + "Please select a coin Id:");
         }
 
         public double DetermineTypeOfCoin(string coin)
