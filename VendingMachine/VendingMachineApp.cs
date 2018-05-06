@@ -6,11 +6,26 @@ using System.Threading.Tasks;
 
 namespace VendingMachine
 {
-    class VendingMachineApp
+    public class VendingMachineApp
     {
         static void Main()
         {
 
+        }
+
+
+        public double DetermineTypeOfCoin(string coin)
+        {
+            if (coin.Equals("Quarter"))
+                return 0.25;
+            else if (coin.Equals("Dime"))
+                return 0.10;
+            else if (coin.Equals("Nickel"))
+                return 0.05;
+            else if (coin.Equals("Penny"))
+                return 0.01;
+            else
+                return 0;
         }
     }
 }
