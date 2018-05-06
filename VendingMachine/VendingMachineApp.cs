@@ -13,7 +13,6 @@ namespace VendingMachine
 
         }
 
-
         public double DetermineTypeOfCoin(string coin)
         {
             if (coin.Equals("Quarter"))
@@ -26,6 +25,28 @@ namespace VendingMachine
                 return 0.01;
             else
                 return 0;
+        }
+
+        public List<Item> CreateVendingProducts()
+        {
+            List<Item> products = new List<Item>();
+            Item cola = new Item("cola", 1.00, 5);
+            products.Add(cola);
+            return products;
+        }
+    }
+
+    public struct Item
+    {
+        public string Name;
+        public double Price;
+        public int AmountInStock;
+
+        public Item(string name, double price, int amountInStock)
+        {
+            Name = name;
+            Price = price;
+            AmountInStock = amountInStock;
         }
     }
 }
