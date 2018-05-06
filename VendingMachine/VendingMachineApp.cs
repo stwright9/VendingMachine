@@ -31,7 +31,11 @@ namespace VendingMachine
         {
             List<Item> products = new List<Item>();
             Item cola = new Item("cola", 1.00, 5);
+            Item chips = new Item("chips", 0.65, 3);
+            Item candy = new Item("candy", 0.50, 2);
             products.Add(cola);
+            products.Add(chips);
+            products.Add(candy);
             return products;
         }
     }

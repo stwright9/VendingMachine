@@ -35,6 +35,14 @@ namespace VendingMachineTests
             Assert.IsTrue(products.Any(i => i.Name.Equals("cola")));
             Assert.IsTrue(products.Where(i => i.Name.Equals("cola")).Single().Price.Equals(1.00));
             Assert.IsTrue(products.Where(i => i.Name.Equals("cola")).Single().AmountInStock.Equals(5));
+
+            Assert.IsTrue(products.Any(i => i.Name.Equals("chips")));
+            Assert.IsTrue(products.Where(i => i.Name.Equals("chips")).Single().Price.Equals(0.65));
+            Assert.IsTrue(products.Where(i => i.Name.Equals("chips")).Single().AmountInStock.Equals(3));
+
+            Assert.IsTrue(products.Any(i => i.Name.Equals("candy")));
+            Assert.IsTrue(products.Where(i => i.Name.Equals("candy")).Single().Price.Equals(0.50));
+            Assert.IsTrue(products.Where(i => i.Name.Equals("candy")).Single().AmountInStock.Equals(2));
         }
     }
 }
