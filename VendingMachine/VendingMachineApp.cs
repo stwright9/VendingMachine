@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VendingMachine
 {
@@ -10,33 +11,45 @@ namespace VendingMachine
             ConsoleKeyInfo input;
             do
             {
-                VendingMachineApp app = new VendingMachineApp();
+                Console.Clear();
+
+                List<Item> products = new List<Item>();
+                products = app.CreateVendingProducts();
+
                 app.DisplayCurrentChange();
                 app.DisplayCoins();
+
                 input = Console.ReadKey();
-                app.ProcessCoinInsertion(input);
+
+                app.ProcessKeyInput(input, products);
+
             } while (input.Key != ConsoleKey.D0);
         }
 
-        public void ProcessCoinInsertion(ConsoleKeyInfo input)
+        public void ProcessKeyInput(ConsoleKeyInfo input, List<Item> products)
         {
             if (input.Key == ConsoleKey.D1)
-                DetermineTypeOfCoin("Quarter");
+                changeInserted += DetermineTypeOfCoin("Quarter");
             else if (input.Key == ConsoleKey.D2)
-                DetermineTypeOfCoin("Dime");
+                changeInserted += DetermineTypeOfCoin("Dime");
             else if (input.Key == ConsoleKey.D3)
-                DetermineTypeOfCoin("Nickel");
+                changeInserted += DetermineTypeOfCoin("Nickel");
             else if (input.Key == ConsoleKey.D4)
-                DetermineTypeOfCoin("Penny");
+                changeInserted += DetermineTypeOfCoin("Penny");
             else if (input.Key == ConsoleKey.D5)
-                DisplayProducts();
-            else            
-                Console.Clear();                
+            {
+                Console.Clear();
+                DisplayCurrentChange();
+                DisplayProducts(products);
+                ProcessProductInput(products);
+            }                
+            else
+                Console.Clear();
         }
 
         public void DisplayCurrentChange()
         {
-            Console.WriteLine("Current Change: " + changeInserted);
+            Console.WriteLine("Current Change: " + changeInserted + "\n");
         }
 
         public void DisplayCoins()
@@ -49,7 +62,7 @@ namespace VendingMachine
             Console.WriteLine("4:" + "\t" + "Penny");
             Console.WriteLine("5:" + "\t" + "Show Products");
             Console.WriteLine("0:" + "\t" + "Exit Application");
-            Console.Write("\n" + "Please select a coin Id:");
+            Console.Write("\n" + "Please select an Id:");
         }
 
         public double DetermineTypeOfCoin(string coin)
@@ -61,22 +74,41 @@ namespace VendingMachine
             else if (coin.Equals("Nickel"))
                 return 0.05;
             else if (coin.Equals("Penny"))
-                return 0.01;
+                return 0;
             else
                 return 0;
         }
 
-        public void DisplayProducts()
+        public void DisplayProducts(List<Item> products)
         {
-            List<Item> products = new List<Item>();
-            products = CreateVendingProducts();           
-
-            Console.Write("\t" + "Name" + "\t" + "Amount" + "\t" + "Stock" + "\n");
+            Console.Write("Id" + "\t" + "Name" + "\t" + "Amount" + "\t" + "Stock" + "\n");
             foreach(Item i in products)
             {
                 Console.Write(i.Id + ": " + "\t" + i.Name + "\t" + "$" + i.Price + "\t" + i.AmountInStock + "\n");                
             }
-            Console.WriteLine("0:" + "\t" + "Exit Application");
+            Console.WriteLine("0:" + "\t" + "Insert Coins");
+            Console.Write("\n" + "Please select an Id:");
+
+        }
+
+        public void ProcessProductInput(List<Item> products)
+        {
+            ConsoleKeyInfo productInput;
+            VendingMachineApp productApp = new VendingMachineApp();
+
+            do
+            {
+                Console.Clear();
+                DisplayCurrentChange();
+                productApp.DisplayProducts(products);
+                productInput = Console.ReadKey();
+
+                if (productInput.Key.Equals(products.Select(i => i.Id)))
+                {
+
+                }
+
+            } while (productInput.Key != ConsoleKey.D0);
         }
 
         public List<Item> CreateVendingProducts()
@@ -90,8 +122,9 @@ namespace VendingMachine
             products.Add(candy);
             return products;
         }
-        
-        private double changeInserted = 0;
+
+        private static VendingMachineApp app = new VendingMachineApp();
+        private static double changeInserted = 0;
     }
 
     public struct Item

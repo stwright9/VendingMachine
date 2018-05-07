@@ -18,7 +18,7 @@ namespace VendingMachineTests
             Assert.AreEqual(0.25, vendingMachine.DetermineTypeOfCoin("Quarter"));
             Assert.AreEqual(0.10, vendingMachine.DetermineTypeOfCoin("Dime"));
             Assert.AreEqual(0.05, vendingMachine.DetermineTypeOfCoin("Nickel"));
-            Assert.AreEqual(0.01, vendingMachine.DetermineTypeOfCoin("Penny"));
+            Assert.AreEqual(0.00, vendingMachine.DetermineTypeOfCoin("Penny"));
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace VendingMachineTests
             {
                 Console.SetOut(sw);
 
-                vendingMachine.DisplayProducts();
+                vendingMachine.DisplayProducts(vendingMachine.CreateVendingProducts());
                 
                 Assert.IsTrue(sw.ToString().Count() > 0);
             }
