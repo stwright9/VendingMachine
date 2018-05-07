@@ -7,8 +7,9 @@ Steps to install/Run:
 2. Verify: run 'dir %windir%\Microsoft.NET\Framework /AD' to see your .NET versions 
 <br /> or <br />
    Download .Net Framework v4.6+ https://www.microsoft.com/net/download/dotnet-framework-runtime
-3. Run VendingMachine.sln and Build the project.
-4. Run debuging mode with F5 or start the application in your ~\VendingMachine\bin\Debug\VendingMachine.exe directory.
+3. Download zip and extract or clone the repo to your own machine.
+4. Run VendingMachine.sln and Build the project from the directory you downloaded the files to.
+5. Run debuging mode with F5 or start the application in your ~\VendingMachine\bin\Debug\VendingMachine.exe directory.
 
 Steps to run unit tests:
 1. With the solution open and built run the tests from the top menu option Test>Run>All Tests.
