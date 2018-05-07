@@ -18,7 +18,7 @@ namespace VendingMachineTests
             Assert.AreEqual(0.25, vendingMachine.DetermineTypeOfCoin("Quarter"));
             Assert.AreEqual(0.10, vendingMachine.DetermineTypeOfCoin("Dime"));
             Assert.AreEqual(0.05, vendingMachine.DetermineTypeOfCoin("Nickel"));
-            Assert.AreEqual(0.00, vendingMachine.DetermineTypeOfCoin("Penny"));
+            Assert.AreEqual(0.01, vendingMachine.DetermineTypeOfCoin("Penny"));
         }
 
         [TestMethod]
@@ -35,15 +35,15 @@ namespace VendingMachineTests
 
             Assert.IsTrue(products.Any(i => i.Name.Equals("cola")));
             Assert.IsTrue(products.Where(i => i.Name.Equals("cola")).Single().Price.Equals(1.00));
-            Assert.IsTrue(products.Where(i => i.Name.Equals("cola")).Single().AmountInStock.Equals(5));
+            Assert.IsTrue(products.Where(i => i.Name.Equals("cola")).Single().AmountInStock.Equals("5"));
 
             Assert.IsTrue(products.Any(i => i.Name.Equals("chips")));
             Assert.IsTrue(products.Where(i => i.Name.Equals("chips")).Single().Price.Equals(0.65));
-            Assert.IsTrue(products.Where(i => i.Name.Equals("chips")).Single().AmountInStock.Equals(3));
+            Assert.IsTrue(products.Where(i => i.Name.Equals("chips")).Single().AmountInStock.Equals("3"));
 
             Assert.IsTrue(products.Any(i => i.Name.Equals("candy")));
             Assert.IsTrue(products.Where(i => i.Name.Equals("candy")).Single().Price.Equals(0.50));
-            Assert.IsTrue(products.Where(i => i.Name.Equals("candy")).Single().AmountInStock.Equals(2));
+            Assert.IsTrue(products.Where(i => i.Name.Equals("candy")).Single().AmountInStock.Equals("2"));
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace VendingMachineTests
         [TestMethod]
         public void VerifyMakeChangeTest()
         {
-            Item item = new Item(1, "test", 1.20, 5);
+            Item item = new Item(1, "test", 1.20, "5");
             double currentBalance = 4.00;
 
             Assert.AreEqual(2.80, vendingMachine.MakeChange(item, currentBalance)); 
@@ -97,10 +97,17 @@ namespace VendingMachineTests
         [TestMethod]
         public void VerifyReturnCoinsTest()
         {
-            double changeInCoinReturn = 2;
-            Assert.AreEqual(2, vendingMachine.ReturnCoins(changeInCoinReturn));
+            Assert.AreEqual(2, vendingMachine.ReturnCoins(2));
         }
 
+        [TestMethod]
+        public void VerifyUpdateItemInStockTest()
+        {
+            Item item = new Item(1, "test", 1.20, "5");
+            Item item2 = new Item(1, "test", 1.20, "4");
+
+            Assert.AreEqual(item2, vendingMachine.UpdateItemInStock(item));
+        }
 
     }
 }

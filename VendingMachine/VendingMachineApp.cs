@@ -9,13 +9,12 @@ namespace VendingMachine
         static void Main()
         {
             ConsoleKeyInfo input;
+            List<Item> products = new List<Item>();
+            products = app.CreateVendingProducts();
             do
             {
                 Console.Clear();
-
-                List<Item> products = new List<Item>();
-                products = app.CreateVendingProducts();
-
+                                
                 app.DisplayCurrentChange();
                 app.DisplayCoins();
 
@@ -86,7 +85,7 @@ namespace VendingMachine
         {
             changeInCoinReturn += coinsToReturn;
             changeInserted = 0;
-            return changeInCoinReturn;
+            return coinsToReturn;
         }
 
         public void DisplayProducts(List<Item> products)
@@ -104,6 +103,7 @@ namespace VendingMachine
         public void ProcessProductInput(List<Item> products)
         {
             bool insufficientFunds = false;
+            bool outOfStock = false;
             ConsoleKeyInfo productInput;
             VendingMachineApp productApp = new VendingMachineApp();
 
@@ -115,19 +115,41 @@ namespace VendingMachine
                 if(insufficientFunds)
                     Console.WriteLine("Insufficient Funds for selected item");
 
+                if(outOfStock)
+                    Console.WriteLine("That Item is SOLD OUT");
+
                 productApp.DisplayProducts(products);
                 productInput = Console.ReadKey();
                 
                 if (products.Any(i => i.Id == ConvertInputToKey(productInput)))
                 {
                     Item selectedProduct = products.Where(i => i.Id.Equals(ConvertInputToKey(productInput))).Single();
-                    if (selectedProduct.Price <= changeInserted)
+                    if (selectedProduct.Price <= changeInserted && selectedProduct.AmountInStock != "SOLD OUT")
+                    {                        
+                        selectedProduct = UpdateItemInStock(selectedProduct);
                         MakeChange(selectedProduct, changeInserted);
+                    }
+                    else if (selectedProduct.AmountInStock == "SOLD OUT")
+                        outOfStock = true;
                     else
                         insufficientFunds = true;
                 }
 
             } while (productInput.Key != ConsoleKey.D0);
+        }
+
+        public Item UpdateItemInStock(Item product)
+        {
+            if (Int32.TryParse(product.AmountInStock, out int stock))
+                if (stock == 1)
+                    product.AmountInStock = "SOLD OUT";
+                else
+                {
+                    stock = stock - 1;
+                    product.AmountInStock = stock.ToString();
+                }                    
+
+            return product;
         }
 
         //Assumes enough change is met for the select item from ProcessProductInput logic
@@ -152,9 +174,9 @@ namespace VendingMachine
         public List<Item> CreateVendingProducts()
         {
             List<Item> products = new List<Item>();
-            Item cola = new Item(1, "cola", 1.00, 5);
-            Item chips = new Item(2, "chips", 0.65, 3);
-            Item candy = new Item(3, "candy", 0.50, 2);
+            Item cola = new Item(1, "cola", 1.00, "5");
+            Item chips = new Item(2, "chips", 0.65, "3");
+            Item candy = new Item(3, "candy", 0.50, "2");
             products.Add(cola);
             products.Add(chips);
             products.Add(candy);
@@ -166,14 +188,14 @@ namespace VendingMachine
         private static double changeInCoinReturn = 0;
     }
 
-    public struct Item
+    public class Item
     {
         public int Id;
         public string Name;
         public double Price;
-        public int AmountInStock;
+        public string AmountInStock;
 
-        public Item(int id, string name, double price, int amountInStock)
+        public Item(int id, string name, double price, string amountInStock)
         {
             Id = id;
             Name = name;
