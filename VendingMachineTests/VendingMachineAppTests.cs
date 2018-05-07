@@ -106,8 +106,19 @@ namespace VendingMachineTests
             Item item = new Item(1, "test", 1.20, "5");
             Item item2 = new Item(1, "test", 1.20, "4");
 
-            Assert.AreEqual(item2, vendingMachine.UpdateItemInStock(item));
+            item = vendingMachine.UpdateItemInStock(item);
+
+            Assert.AreEqual(item2.AmountInStock, item.AmountInStock);
         }
 
+        [TestMethod]
+        public void VerifyDetermineExactChangeTest()
+        {
+            Assert.AreEqual(4.00, vendingMachine.DetermineExactChange("4.00"));
+            Assert.AreEqual(0, vendingMachine.DetermineExactChange("asdf4.00terwer"));
+            Assert.AreEqual(0, vendingMachine.DetermineExactChange("-1"));
+        }
+
+        
     }
 }

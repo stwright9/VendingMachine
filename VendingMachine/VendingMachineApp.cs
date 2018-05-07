@@ -9,6 +9,13 @@ namespace VendingMachine
         static void Main()
         {
             ConsoleKeyInfo input;
+
+            Console.WriteLine("Do you want exact change mode? (Y/N)");
+            input = Console.ReadKey();
+
+            if (input.Key.Equals(ConsoleKey.Y))
+                exactChange = true;
+
             List<Item> products = new List<Item>();
             products = app.CreateVendingProducts();
             do
@@ -16,7 +23,11 @@ namespace VendingMachine
                 Console.Clear();
                                 
                 app.DisplayCurrentChange();
-                app.DisplayCoins();
+
+                if (!exactChange)
+                    app.DisplayCoins();
+                else
+                    app.DisplayExactChange();
 
                 input = Console.ReadKey();
 
@@ -44,6 +55,13 @@ namespace VendingMachine
             }
             else if (input.Key == ConsoleKey.D6)
                 ReturnCoins(changeInserted);
+            else if (input.Key == ConsoleKey.D7 && exactChange)
+            {
+                Console.Clear();
+                Console.WriteLine("Enter the amount of change you want to add to your balance:");
+                changeInserted += DetermineExactChange(Console.ReadLine());
+            }
+                
             else
                 Console.Clear();
         }
@@ -65,6 +83,27 @@ namespace VendingMachine
             Console.WriteLine("6:" + "\t" + "Return Coins");
             Console.WriteLine("0:" + "\t" + "Exit Application");
             Console.Write("\n" + "Please select an Id:");
+        }
+
+        public void DisplayExactChange()
+        {
+            Console.WriteLine("EXACT CHANGE ONLY" + "\n");
+            Console.WriteLine("Id" + "\t" + "Coin");            
+            Console.WriteLine("5:" + "\t" + "Show Products");
+            Console.WriteLine("6:" + "\t" + "Return Coins");
+            Console.WriteLine("7:" + "\t" + "Enter Change");
+            Console.WriteLine("0:" + "\t" + "Exit Application");
+            Console.Write("\n" + "Please select an Id:");
+        }
+
+        //Invalid amounts will return 0
+        public double DetermineExactChange(string amount)
+        {            
+            Console.WriteLine("Enter the amount of change you want to add to your balance:");
+            Double.TryParse(amount, out double parsedAmount);
+            if (parsedAmount < 0)
+                parsedAmount = 0;
+            return parsedAmount;
         }
 
         public double DetermineTypeOfCoin(string coin)
@@ -95,7 +134,10 @@ namespace VendingMachine
             {
                 Console.Write(i.Id + ": " + "\t" + i.Name + "\t" + "$" + i.Price + "\t" + i.AmountInStock + "\n");                
             }
-            Console.WriteLine("0:" + "\t" + "Insert Coins");
+            if(!exactChange)
+                Console.WriteLine("0:" + "\t" + "Insert Coins");
+            else
+                Console.WriteLine("0:" + "\t" + "Insert Exact Change");
             Console.Write("\n" + "Please select an Id:");
 
         }
@@ -124,9 +166,10 @@ namespace VendingMachine
                 if (products.Any(i => i.Id == ConvertInputToKey(productInput)))
                 {
                     Item selectedProduct = products.Where(i => i.Id.Equals(ConvertInputToKey(productInput))).Single();
-                    if (selectedProduct.Price <= changeInserted && selectedProduct.AmountInStock != "SOLD OUT")
-                    {                        
-                        selectedProduct = UpdateItemInStock(selectedProduct);
+                    if (selectedProduct.AmountInStock != "SOLD OUT")
+                    {
+                        if (changeInserted >= selectedProduct.Price)
+                            selectedProduct = UpdateItemInStock(selectedProduct);
                         MakeChange(selectedProduct, changeInserted);
                     }
                     else if (selectedProduct.AmountInStock == "SOLD OUT")
@@ -151,13 +194,15 @@ namespace VendingMachine
 
             return product;
         }
-
-        //Assumes enough change is met for the select item from ProcessProductInput logic
+        
         public double MakeChange(Item selectedProduct, double currentBalance)
         {
-            currentBalance -= selectedProduct.Price;            
-            changeInCoinReturn += currentBalance;
-            changeInserted = currentBalance;
+            if (currentBalance >= selectedProduct.Price)
+                changeInCoinReturn = currentBalance - selectedProduct.Price;
+            else if (changeInCoinReturn == 0)
+                changeInCoinReturn = currentBalance;
+
+            changeInserted = 0;
             return changeInCoinReturn;
         }
 
@@ -169,7 +214,6 @@ namespace VendingMachine
             else
                 return -1;
         }
-
 
         public List<Item> CreateVendingProducts()
         {
@@ -186,6 +230,7 @@ namespace VendingMachine
         private static VendingMachineApp app = new VendingMachineApp();
         private static double changeInserted = 0;
         private static double changeInCoinReturn = 0;
+        private static bool exactChange = false;
     }
 
     public class Item
