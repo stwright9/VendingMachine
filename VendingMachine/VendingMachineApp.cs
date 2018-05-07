@@ -6,11 +6,32 @@ namespace VendingMachine
     public class VendingMachineApp
     {        
         static void Main()
-        {            
-            VendingMachineApp app = new VendingMachineApp();
-            app.DisplayCurrentChange();
-            app.DisplayCoins();
-            Console.ReadLine();
+        {
+            ConsoleKeyInfo input;
+            do
+            {
+                VendingMachineApp app = new VendingMachineApp();
+                app.DisplayCurrentChange();
+                app.DisplayCoins();
+                input = Console.ReadKey();
+                app.ProcessCoinInsertion(input);
+            } while (input.Key != ConsoleKey.D0);
+        }
+
+        public void ProcessCoinInsertion(ConsoleKeyInfo input)
+        {
+            if (input.Key == ConsoleKey.D1)
+                DetermineTypeOfCoin("Quarter");
+            else if (input.Key == ConsoleKey.D2)
+                DetermineTypeOfCoin("Dime");
+            else if (input.Key == ConsoleKey.D3)
+                DetermineTypeOfCoin("Nickel");
+            else if (input.Key == ConsoleKey.D4)
+                DetermineTypeOfCoin("Penny");
+            else if (input.Key == ConsoleKey.D5)
+                DisplayProducts();
+            else            
+                Console.Clear();                
         }
 
         public void DisplayCurrentChange()
@@ -26,9 +47,10 @@ namespace VendingMachine
             Console.WriteLine("2:" + "\t" + "Dime");
             Console.WriteLine("3:" + "\t" + "Nickel");
             Console.WriteLine("4:" + "\t" + "Penny");
+            Console.WriteLine("5:" + "\t" + "Show Products");
+            Console.WriteLine("0:" + "\t" + "Exit Application");
             Console.Write("\n" + "Please select a coin Id:");
         }
-
 
         public double DetermineTypeOfCoin(string coin)
         {
@@ -54,6 +76,7 @@ namespace VendingMachine
             {
                 Console.Write(i.Id + ": " + "\t" + i.Name + "\t" + "$" + i.Price + "\t" + i.AmountInStock + "\n");                
             }
+            Console.WriteLine("0:" + "\t" + "Exit Application");
         }
 
         public List<Item> CreateVendingProducts()
@@ -67,7 +90,7 @@ namespace VendingMachine
             products.Add(candy);
             return products;
         }
-
+        
         private double changeInserted = 0;
     }
 
