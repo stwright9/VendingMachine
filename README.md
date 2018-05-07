@@ -4,8 +4,8 @@ This project was programmed on Visual Studio 2017 Community edition using .NET F
 
 Steps to install/Run:
 1. Download Visual Studio: https://www.visualstudio.com/vs/features/net-development/
-2. Verify: run 'dir %windir%\Microsoft.NET\Framework /AD' to see your .NET versions
-   or 
+2. Verify: run 'dir %windir%\Microsoft.NET\Framework /AD' to see your .NET versions 
+<br /> or <br />
    Download .Net Framework v4.6+ https://www.microsoft.com/net/download/dotnet-framework-runtime
 3. Run VendingMachine.sln and Build the project.
 4. Run debuging mode with F5 or start the application in your ~\VendingMachine\bin\Debug\VendingMachine.exe directory.
