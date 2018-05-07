@@ -91,13 +91,6 @@ namespace VendingMachine
 
         }
 
-        public void DisplayProductInsufficientFunds(Item selectedProduct)
-        {
-            Console.Clear();
-            Console.WriteLine("Insufficient Funds for " + selectedProduct.Name);
-            
-        }
-
         public void ProcessProductInput(List<Item> products)
         {
             bool insufficientFunds = false;

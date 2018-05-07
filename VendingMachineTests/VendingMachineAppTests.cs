@@ -84,22 +84,5 @@ namespace VendingMachineTests
                 Assert.IsTrue(sw.ToString().Count() > 0);
             }
         }
-
-        [TestMethod]
-        public void VerifyConsoleDisplayProductInsufficientFunds()
-        {
-            using (StringWriter sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-
-                Item item = new Item(1, "test", 1.20, 5);
-
-                vendingMachine.DisplayProductInsufficientFunds(item);
-
-                Assert.IsTrue(sw.ToString().Count() > 0);
-            }
-        }
-
-        
     }
 }
