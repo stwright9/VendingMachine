@@ -35,7 +35,7 @@ namespace VendingMachine
             else if (input.Key == ConsoleKey.D3)
                 changeInserted += DetermineTypeOfCoin("Nickel");
             else if (input.Key == ConsoleKey.D4)
-                changeInserted += DetermineTypeOfCoin("Penny");
+                changeInCoinReturn += DetermineTypeOfCoin("Penny");             
             else if (input.Key == ConsoleKey.D5)
             {
                 Console.Clear();
@@ -76,8 +76,8 @@ namespace VendingMachine
                 return 0.10;
             else if (coin.Equals("Nickel"))
                 return 0.05;
-            else if (coin.Equals("Penny"))
-                return 0;
+            else if (coin.Equals("Penny"))            
+                return 0.01;
             else
                 return 0;
         }
