@@ -139,9 +139,8 @@ namespace VendingMachine
             else
                 Console.WriteLine("0:" + "\t" + "Insert Exact Change");
             Console.Write("\n" + "Please select an Id:");
-
         }
-
+                
         public void ProcessProductInput(List<Item> products)
         {
             bool insufficientFunds = false;
