@@ -42,7 +42,9 @@ namespace VendingMachine
                 DisplayCurrentChange();
                 DisplayProducts(products);
                 ProcessProductInput(products);
-            }                
+            }
+            else if (input.Key == ConsoleKey.D6)
+                ReturnCoins(changeInserted);
             else
                 Console.Clear();
         }
@@ -61,6 +63,7 @@ namespace VendingMachine
             Console.WriteLine("3:" + "\t" + "Nickel");
             Console.WriteLine("4:" + "\t" + "Penny");
             Console.WriteLine("5:" + "\t" + "Show Products");
+            Console.WriteLine("6:" + "\t" + "Return Coins");
             Console.WriteLine("0:" + "\t" + "Exit Application");
             Console.Write("\n" + "Please select an Id:");
         }
@@ -77,6 +80,13 @@ namespace VendingMachine
                 return 0;
             else
                 return 0;
+        }
+
+        public double ReturnCoins(double coinsToReturn)
+        {
+            changeInCoinReturn += coinsToReturn;
+            changeInserted = 0;
+            return changeInCoinReturn;
         }
 
         public void DisplayProducts(List<Item> products)

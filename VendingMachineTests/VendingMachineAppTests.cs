@@ -94,6 +94,13 @@ namespace VendingMachineTests
             Assert.AreEqual(2.80, vendingMachine.MakeChange(item, currentBalance)); 
         }
 
+        [TestMethod]
+        public void VerifyReturnCoinsTest()
+        {
+            double changeInCoinReturn = 2;
+            Assert.AreEqual(2, vendingMachine.ReturnCoins(changeInCoinReturn));
+        }
+
 
     }
 }
