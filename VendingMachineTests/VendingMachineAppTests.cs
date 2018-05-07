@@ -84,5 +84,16 @@ namespace VendingMachineTests
                 Assert.IsTrue(sw.ToString().Count() > 0);
             }
         }
+
+        [TestMethod]
+        public void VerifyMakeChangeTest()
+        {
+            Item item = new Item(1, "test", 1.20, 5);
+            double currentBalance = 4.00;
+
+            Assert.AreEqual(2.80, vendingMachine.MakeChange(item, currentBalance)); 
+        }
+
+
     }
 }

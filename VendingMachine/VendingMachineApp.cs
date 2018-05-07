@@ -49,7 +49,7 @@ namespace VendingMachine
 
         public void DisplayCurrentChange()
         {
-            Console.WriteLine("Current Change: " + changeInserted + "\n");
+            Console.WriteLine("Current Change: " + changeInserted + "\t" + "Coin Return: " + changeInCoinReturn + "\n");
         }
 
         public void DisplayCoins()
@@ -112,12 +112,21 @@ namespace VendingMachine
                 {
                     Item selectedProduct = products.Where(i => i.Id.Equals(ConvertInputToKey(productInput))).Single();
                     if (selectedProduct.Price <= changeInserted)
-                        changeInserted -= selectedProduct.Price;
-                    else                    
+                        MakeChange(selectedProduct, changeInserted);
+                    else
                         insufficientFunds = true;
                 }
 
             } while (productInput.Key != ConsoleKey.D0);
+        }
+
+        //Assumes enough change is met for the select item from ProcessProductInput logic
+        public double MakeChange(Item selectedProduct, double currentBalance)
+        {
+            currentBalance -= selectedProduct.Price;            
+            changeInCoinReturn += currentBalance;
+            changeInserted = currentBalance;
+            return changeInCoinReturn;
         }
 
         //This is only for ProcessProductInput for converting the keyinput to a int Id to find the selected product
@@ -144,6 +153,7 @@ namespace VendingMachine
 
         private static VendingMachineApp app = new VendingMachineApp();
         private static double changeInserted = 0;
+        private static double changeInCoinReturn = 0;
     }
 
     public struct Item
