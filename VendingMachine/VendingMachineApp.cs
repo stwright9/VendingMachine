@@ -68,7 +68,13 @@ namespace VendingMachine
 
         public void DisplayCurrentChange()
         {
-            Console.WriteLine("Current Change: " + changeInserted + "\t" + "Coin Return: " + changeInCoinReturn + "\n");
+            if(purchasedItem)
+            {
+                Console.WriteLine("Current Change: " + changeInserted + "\t" + "Coin Return: " + changeInCoinReturn + "\n");
+                Console.WriteLine("THANK YOU FOR YOUR PURCHASE" + "\n");
+            }                
+            else
+                Console.WriteLine("Current Change: " + changeInserted + "\t" + "Coin Return: " + changeInCoinReturn + "\n");
         }
 
         public void DisplayCoins()
@@ -120,9 +126,10 @@ namespace VendingMachine
                 return 0;
         }
 
+        //I am assuming your taking the change out of the coin return every time you return coins
         public double ReturnCoins(double coinsToReturn)
         {
-            changeInCoinReturn += coinsToReturn;
+            changeInCoinReturn = coinsToReturn;
             changeInserted = 0;
             return coinsToReturn;
         }
@@ -143,41 +150,23 @@ namespace VendingMachine
                 
         public void ProcessProductInput(List<Item> products)
         {
-            bool insufficientFunds = false;
-            bool outOfStock = false;
             ConsoleKeyInfo productInput;
             VendingMachineApp productApp = new VendingMachineApp();
+            
+            Console.Clear();
+            DisplayCurrentChange();
 
-            do
-            {
-                Console.Clear();
-                DisplayCurrentChange();
-
-                if(insufficientFunds)
-                    Console.WriteLine("Insufficient Funds for selected item");
-
-                if(outOfStock)
-                    Console.WriteLine("That Item is SOLD OUT");
-
-                productApp.DisplayProducts(products);
-                productInput = Console.ReadKey();
+            productApp.DisplayProducts(products);
+            productInput = Console.ReadKey();
                 
-                if (products.Any(i => i.Id == ConvertInputToKey(productInput)))
-                {
-                    Item selectedProduct = products.Where(i => i.Id.Equals(ConvertInputToKey(productInput))).Single();
-                    if (selectedProduct.AmountInStock != "SOLD OUT")
-                    {
-                        if (changeInserted >= selectedProduct.Price)
-                            selectedProduct = UpdateItemInStock(selectedProduct);
-                        MakeChange(selectedProduct, changeInserted);
-                    }
-                    else if (selectedProduct.AmountInStock == "SOLD OUT")
-                        outOfStock = true;
-                    else
-                        insufficientFunds = true;
-                }
-
-            } while (productInput.Key != ConsoleKey.D0);
+            if (products.Any(i => i.Id == ConvertInputToKey(productInput)))
+            {
+                Item selectedProduct = products.Where(i => i.Id.Equals(ConvertInputToKey(productInput))).Single();
+                
+                if (changeInserted >= selectedProduct.Price)
+                    selectedProduct = UpdateItemInStock(selectedProduct);
+                MakeChange(selectedProduct, changeInserted);                
+            }
         }
 
         public Item UpdateItemInStock(Item product)
@@ -189,11 +178,13 @@ namespace VendingMachine
                 {
                     stock = stock - 1;
                     product.AmountInStock = stock.ToString();
+                    purchasedItem = true;
                 }                    
 
             return product;
         }
         
+        //I am assuming your taking the change out of the coin return every time you try to buy another item
         public double MakeChange(Item selectedProduct, double currentBalance)
         {
             if (currentBalance >= selectedProduct.Price)
@@ -230,6 +221,7 @@ namespace VendingMachine
         private static double changeInserted = 0;
         private static double changeInCoinReturn = 0;
         private static bool exactChange = false;
+        private static bool purchasedItem = false;
     }
 
     public class Item
