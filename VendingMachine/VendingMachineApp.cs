@@ -91,8 +91,16 @@ namespace VendingMachine
 
         }
 
+        public void DisplayProductInsufficientFunds(Item selectedProduct)
+        {
+            Console.Clear();
+            Console.WriteLine("Insufficient Funds for " + selectedProduct.Name);
+            
+        }
+
         public void ProcessProductInput(List<Item> products)
         {
+            bool insufficientFunds = false;
             ConsoleKeyInfo productInput;
             VendingMachineApp productApp = new VendingMachineApp();
 
@@ -100,16 +108,34 @@ namespace VendingMachine
             {
                 Console.Clear();
                 DisplayCurrentChange();
+
+                if(insufficientFunds)
+                    Console.WriteLine("Insufficient Funds for selected item");
+
                 productApp.DisplayProducts(products);
                 productInput = Console.ReadKey();
-
-                if (productInput.Key.Equals(products.Select(i => i.Id)))
+                
+                if (products.Any(i => i.Id == ConvertInputToKey(productInput)))
                 {
-
+                    Item selectedProduct = products.Where(i => i.Id.Equals(ConvertInputToKey(productInput))).Single();
+                    if (selectedProduct.Price <= changeInserted)
+                        changeInserted -= selectedProduct.Price;
+                    else                    
+                        insufficientFunds = true;
                 }
 
             } while (productInput.Key != ConsoleKey.D0);
         }
+
+        //This is only for ProcessProductInput for converting the keyinput to a int Id to find the selected product
+        private static int ConvertInputToKey(ConsoleKeyInfo input)
+        {            
+            if (char.IsDigit(input.KeyChar))
+                return int.Parse(input.KeyChar.ToString());
+            else
+                return -1;
+        }
+
 
         public List<Item> CreateVendingProducts()
         {
